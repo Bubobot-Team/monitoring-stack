@@ -1,0 +1,130 @@
+---
+- name: Deploy Monitoring Stack
+  hosts: collectors
+  become: true
+  vars:
+    grafana_admin_user: "admin"
+    grafana_admin_password: "your_secure_password_here"  # Change this to your desired password
+
+  tasks:
+    - name: Install required packages
+      apt:
+        name:
+          - apt-transport-https
+          - ca-certificates
+          - curl
+          - gnupg
+          - lsb-release
+          - python3-pip
+        state: present
+        update_cache: yes
+
+    - name: Add Docker GPG key
+      apt_key:
+        url: https://download.docker.com/linux/ubuntu/gpg
+        state: present
+
+    - name: Add Docker repository
+      apt_repository:
+        repo: deb [arch=amd64] https://download.docker.com/linux/ubuntu {{ ansible_distribution_release }} stable
+        state: present
+        update_cache: yes
+
+    - name: Install Docker and Docker Compose
+      apt:
+        name:
+          - docker-ce
+          - docker-ce-cli
+          - containerd.io
+          - docker-buildx-plugin
+          - docker-compose-plugin
+        state: present
+        update_cache: yes
+
+    - name: Install Docker Python module
+      pip:
+        name: docker
+        state: present
+
+    - name: Create required directories
+      file:
+        path: "{{ item }}"
+        state: directory
+        mode: '0755'
+      with_items:
+        - /opt/monitoring
+        - /data/prometheus
+        - /data/alertmanager
+        - /data/grafana
+        - /data/nginx/logs
+
+    - name: Set permissions for Grafana directory
+      file:
+        path: /data/grafana
+        state: directory
+        mode: '0777'
+        recurse: yes
+
+    - name: Set permissions for Prometheus directory
+      file:
+        path: /data/prometheus
+        state: directory
+        mode: '0777'
+        recurse: yes
+
+    - name: Set permissions for Alertmanager directory
+      file:
+        path: /data/alertmanager
+        state: directory
+        mode: '0777'
+        recurse: yes
+
+    - name: Set permissions for Nginx logs directory
+      file:
+        path: /data/nginx/logs
+        state: directory
+        mode: '0777'
+        recurse: yes
+
+    - name: Create .env file for Grafana credentials
+      copy:
+        dest: /opt/monitoring/.env
+        content: |
+          GRAFANA_ADMIN_USER={{ grafana_admin_user }}
+          GRAFANA_ADMIN_PASSWORD={{ grafana_admin_password }}
+        mode: '0600'
+
+    - name: Copy Docker Compose file
+      copy:
+        src: docker-compose.yml
+        dest: /opt/monitoring/docker-compose.yml
+        mode: '0644'
+
+    - name: Copy Prometheus configuration
+      copy:
+        src: prometheus/
+        dest: /opt/monitoring/prometheus/
+        mode: '0644'
+
+    - name: Copy Alertmanager configuration
+      copy:
+        src: alertmanager/
+        dest: /opt/monitoring/alertmanager/
+        mode: '0644'
+
+    - name: Copy Grafana configuration
+      copy:
+        src: grafana/
+        dest: /opt/monitoring/grafana/
+        mode: '0644'
+
+    - name: Copy Nginx configuration
+      copy:
+        src: nginx/
+        dest: /opt/monitoring/nginx/
+        mode: '0644'
+
+    - name: Start Docker Compose stack
+      shell: cd /opt/monitoring && docker compose up -d
+      args:
+        creates: /opt/monitoring/.deployed 
