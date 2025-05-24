@@ -21,8 +21,7 @@ stacks/
 
 ## Available Stacks
 
-### [Node Exporter - Prometheus - Alert Manager - Grafana Stack](stacks/node-exporter-prometheus-alertmanager-grafana)
-A complete monitoring solution that collects system metrics, stores them in Prometheus, manages alerts with AlertManager, and visualizes data through Grafana dashboards. Perfect for monitoring server infrastructure and applications.
+* [Node Exporter - Prometheus - Alert Manager - Grafana Stack](stacks/node-exporter-prometheus-alertmanager-grafana) - A complete monitoring solution that collects system metrics, stores them in Prometheus, manages alerts with AlertManager, and visualizes data through Grafana dashboards. Perfect for monitoring server infrastructure and applications.
 
 This repository contains various monitoring stacks that can be deployed using Ansible. Each stack is designed for specific use cases and includes its own documentation.
 
