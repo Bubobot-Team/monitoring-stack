@@ -2,6 +2,8 @@
 
 A complete monitoring solution stack that provides system metrics collection, storage, alerting, and visualization capabilities.
 
+![Monitoring Stack Architecture](diagram.svg)
+
 ## Components
 
 - **Node Exporter**: System metrics collection
