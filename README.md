@@ -10,13 +10,7 @@ Created and maintained by Bubobot Team.
 
 ```
 stacks/
-├── <monitoring-stack-1>/
-│   ├── inventory-hosts
-│   ├── deploy.yml
-│   ├── docker-compose.yml
-│   ├── .env
-│   └── README.md
-├── <monitoring-stack-2>/
+├── node-exporter-prometheus-alertmanager-grafana/
 │   ├── inventory-hosts
 │   ├── deploy.yml
 │   ├── docker-compose.yml
@@ -27,12 +21,27 @@ stacks/
 
 ## Available Stacks
 
-### Content Demo Stack
-Located in `stacks/content-demo/`, this stack includes:
-- Grafana for visualization
-- AlertManager for alert management
-- Nginx as reverse proxy
-- Basic monitoring setup for demonstration purposes
+### Node Exporter - Prometheus - Alert Manager - Grafana Stack
+Located in `stacks/node-exporter-prometheus-alertmanager-grafana/`, this stack includes:
+- Node Exporter for system metrics collection
+- Prometheus for metrics storage and querying
+- Alert Manager for alert management
+- Grafana for visualization and dashboards
+- Nginx as reverse proxy with SSL support
+
+This stack provides a complete monitoring solution for:
+- System metrics (CPU, Memory, Disk, Network)
+- Custom application metrics
+- Alerting and notifications
+- Beautiful dashboards and visualizations
+
+This repository contains various monitoring stacks that can be deployed using Ansible. Each stack is designed for specific use cases and includes its own documentation.
+
+To see the available stacks, check the `stacks/` directory. Each stack comes with:
+- Ansible deployment configuration
+- Docker Compose setup
+- Environment configuration
+- Detailed documentation
 
 ## Quick Start
 
