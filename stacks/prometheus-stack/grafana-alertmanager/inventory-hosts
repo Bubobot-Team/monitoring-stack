@@ -1,5 +1,13 @@
-[collectors]
-collector1 ansible_host=13.212.197.85 collector_port=8080
+[prometheus]
+prometheus1 ansible_host=13.212.197.85 collector_port=9090
+
+[exporters]
+exporter_node1 ansible_host=13.212.197.85 node_port=9100
+exporter_node2 ansible_host=47.129.163.27 node_port=9100
 
 [all:vars]
-ansible_connection=ssh 
+ansible_connection=ssh
+ansible_user=ubuntu 
+GRAFANA_ADMIN_USER=admin
+GRAFANA_ADMIN_PASSWORD=admin123
+DOMAIN_NAME=monitor-demo.bubobot.com 

@@ -14,7 +14,7 @@ upstream alertmanager {
 
 server {
     listen 80;
-    server_name $env_SERVER_NAME;  # Load from environment variable
+    server_name {{ server_name }};  # Using Ansible variable
 
     # Grafana
     location / {

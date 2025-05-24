@@ -1,10 +1,13 @@
 ---
 - name: Deploy Monitoring Stack
-  hosts: collectors
+  hosts: prometheus
   become: true
+  vars_files:
+    - .env_file
   vars:
-    grafana_admin_user: "admin"
-    grafana_admin_password: "your_secure_password_here"  # Change this to your desired password
+    grafana_admin_user: "{{ GRAFANA_ADMIN_USER }}"
+    grafana_admin_password: "{{ GRAFANA_ADMIN_PASSWORD }}"
+    server_name: "{{ DOMAIN_NAME }}"
 
   tasks:
     - name: Install required packages
@@ -90,8 +93,9 @@
       copy:
         dest: /opt/monitoring/.env
         content: |
-          GRAFANA_ADMIN_USER={{ grafana_admin_user }}
-          GRAFANA_ADMIN_PASSWORD={{ grafana_admin_password }}
+          GRAFANA_ADMIN_USER={{ GRAFANA_ADMIN_USER }}
+          GRAFANA_ADMIN_PASSWORD={{ GRAFANA_ADMIN_PASSWORD }}
+          SERVER_NAME={{ DOMAIN_NAME }}
         mode: '0600'
 
     - name: Copy Docker Compose file
@@ -119,9 +123,9 @@
         mode: '0644'
 
     - name: Copy Nginx configuration
-      copy:
-        src: nginx/
-        dest: /opt/monitoring/nginx/
+      template:
+        src: nginx/conf.d/default.conf.j2
+        dest: /opt/monitoring/nginx/conf.d/default.conf
         mode: '0644'
 
     - name: Start Docker Compose stack

@@ -1,0 +1,23 @@
+global:
+  scrape_interval: 15s
+  evaluation_interval: 15s
+
+rule_files:
+  - "rules.yml"
+
+alerting:
+  alertmanagers:
+  - static_configs:
+    - targets: ["localhost:9093"]
+
+scrape_configs:
+{% for host in groups['exporters'] %}
+  - job_name: '{{ host }}'
+    static_configs:
+      - targets: ['{{ hostvars[host]['ansible_host'] }}:9100']
+{% endfor %}
+
+  # Add node exporter for all hosts
+  - job_name: 'node'
+    static_configs:
+      - targets: ['localhost:9100'] 
