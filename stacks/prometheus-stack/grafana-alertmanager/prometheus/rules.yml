@@ -2,13 +2,50 @@ groups:
 - name: example
   rules:
   - alert: HighCPU
-    expr: 100 - (avg by (instance) (irate(node_cpu_seconds_total{mode="idle",job="exporters"}[5m])) * 100) > 0
+    expr: 100 - (avg by (instance) (irate(node_cpu_seconds_total{mode="idle",job="exporters"}[5m])) * 100) > 80
     for: 1m
     labels:
       severity: critical
       service: node
     annotations:
       description: "CPU usage on {{ $labels.instance }} is {{ $value }}%"
+
+  - alert: HighMemoryUsage
+    expr: (node_memory_MemTotal_bytes - node_memory_MemAvailable_bytes) / node_memory_MemTotal_bytes * 100 > 85
+    for: 1m
+    labels:
+      severity: warning
+      service: node
+    annotations:
+      description: "Memory usage on {{ $labels.instance }} is {{ $value }}%"
+
+  - alert: HighSwapUsage
+    expr: (node_memory_SwapTotal_bytes - node_memory_SwapFree_bytes) / node_memory_SwapTotal_bytes * 100 > 80
+    for: 1m
+    labels:
+      severity: warning
+      service: node
+    annotations:
+      description: "Swap usage on {{ $labels.instance }} is {{ $value }}%"
+
+  - alert: HighDiskIO
+    expr: rate(node_disk_io_time_seconds_total[5m]) > 0.8
+    for: 1m
+    labels:
+      severity: warning
+      service: node
+    annotations:
+      description: "Disk I/O utilization on {{ $labels.instance }} is {{ $value }}"
+
+  - alert: HighNetworkTraffic
+    expr: rate(node_network_transmit_bytes_total[5m]) > 100000000 or rate(node_network_receive_bytes_total[5m]) > 100000000
+    for: 1m
+    labels:
+      severity: warning
+      service: node
+    annotations:
+      description: "High network traffic on {{ $labels.instance }} - Transmit: {{ $value }} bytes/s, Receive: {{ $value }} bytes/s"
+
   - alert: HighLatency
     expr: rate(http_request_duration_seconds_sum[5m]) / rate(http_request_duration_seconds_count[5m]) > 0.5
     for: 1m
