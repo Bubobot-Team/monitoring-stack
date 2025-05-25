@@ -2,7 +2,7 @@ groups:
 - name: example
   rules:
   - alert: HighCPU
-    expr: avg(rate(node_cpu_seconds_total{mode="user"}[5m])) > 0.8
+    expr: avg(rate(node_cpu_seconds_total{mode="user"}[3m])) > 0.5
     for: 30s
     labels:
       severity: critical

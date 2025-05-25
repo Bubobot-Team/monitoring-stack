@@ -42,7 +42,7 @@ route:
   repeat_interval: 1h
 
   # A default receiver
-  receiver: 'webhook'
+  receiver: 'n8n-webhook'
 
   # All the above attributes are inherited by all child routes and can
   # overwritten on each.
@@ -125,7 +125,7 @@ receivers:
     pagerduty_configs:
       - service_key: <team-DB-key>
 
-  - name: 'webhook'
+  - name: 'n8n-webhook'
     webhook_configs:
-      - url: 'http://localhost:8080/webhook'  # Replace with your webhook URL
+      - url: 'https://n8n.bubobot.com'
         send_resolved: true

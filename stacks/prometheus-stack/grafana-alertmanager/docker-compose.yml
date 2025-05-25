@@ -9,6 +9,7 @@ services:
       - "9090:9090"
     volumes:
       - ./prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
+      - ./prometheus/rules.yml:/etc/prometheus/rules.yml
       - prometheus_data:/prometheus
     command:
       - '--config.file=/etc/prometheus/prometheus.yml'
@@ -23,7 +24,7 @@ services:
     container_name: alertmanager
     restart: unless-stopped
     ports:
-      - "127.0.0.1:9093:9093"
+      - "9093:9093"
     volumes:
       - ./alertmanager/alertmanager.yml:/etc/alertmanager/alertmanager.yml:ro
       - /data/alertmanager:/alertmanager
