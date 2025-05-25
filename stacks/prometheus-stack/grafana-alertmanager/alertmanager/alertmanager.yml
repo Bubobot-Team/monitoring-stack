@@ -35,11 +35,11 @@ route:
 
   # When the first notification was sent, wait 'group_interval' to send a batch
   # of new alerts that started firing for that group.
-  group_interval: 5m
+  group_interval: 30s
 
   # If an alert has successfully been sent, wait 'repeat_interval' to
   # resend them.
-  repeat_interval: 1h
+  repeat_interval: 60s
 
   # A default receiver
   receiver: 'n8n-webhook'
@@ -51,40 +51,7 @@ route:
   routes:
     # This routes performs a regular expression match on alert labels to
     # catch alerts that are related to a list of services.
-    - matchers:
-        - service=~"foo1|foo2|baz"
-      receiver: team-X-mails
-      # The service has a sub-route for critical alerts, any alerts
-      # that do not match, i.e. severity != critical, fall-back to the
-      # parent node and are sent to 'team-X-mails'
-      routes:
-        - matchers:
-            - severity="critical"
-          receiver: team-X-pager
-    - matchers:
-        - service="files"
-      receiver: team-Y-mails
-
-      routes:
-        - matchers:
-            - severity="critical"
-          receiver: team-Y-pager
-
-    # This route handles all alerts coming from a database service. If there's
-    # no team to handle it, it defaults to the DB team.
-    - matchers:
-        - service="database"
-      receiver: team-DB-pager
-      # Also group alerts by affected database.
-      group_by: [alertname, cluster, database]
-      routes:
-        - matchers:
-            - owner="team-X"
-          receiver: team-X-pager
-          continue: true
-        - matchers:
-            - owner="team-Y"
-          receiver: team-Y-pager
+    
 
 
 # Inhibition rules allow to mute a set of alerts given that another alert is
@@ -103,29 +70,7 @@ inhibit_rules:
 
 
 receivers:
-  - name: 'team-X-mails'
-    email_configs:
-      - to: 'team-X+alerts@example.org'
-
-  - name: 'team-X-pager'
-    email_configs:
-      - to: 'team-X+alerts-critical@example.org'
-    pagerduty_configs:
-      - service_key: <team-X-key>
-
-  - name: 'team-Y-mails'
-    email_configs:
-      - to: 'team-Y+alerts@example.org'
-
-  - name: 'team-Y-pager'
-    pagerduty_configs:
-      - service_key: <team-Y-key>
-
-  - name: 'team-DB-pager'
-    pagerduty_configs:
-      - service_key: <team-DB-key>
-
   - name: 'n8n-webhook'
     webhook_configs:
-      - url: 'https://n8n.bubobot.com'
+      - url: 'https://n8n.bubobot.com/webhook/alertmanager'
         send_resolved: true

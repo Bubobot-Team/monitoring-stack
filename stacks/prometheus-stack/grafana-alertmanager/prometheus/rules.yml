@@ -2,13 +2,13 @@ groups:
 - name: example
   rules:
   - alert: HighCPU
-    expr: avg(rate(node_cpu_seconds_total{mode="user"}[3m])) > 0.5
-    for: 30s
+    expr: 100 - (avg by (instance) (irate(node_cpu_seconds_total{mode="idle",job="exporters"}[5m])) * 100) > 0
+    for: 1m
     labels:
       severity: critical
-      service: api
+      service: node
     annotations:
-      description: CPU usage on {{ $labels.instance }} exceeds 80%
+      description: "CPU usage on {{ $labels.instance }} is {{ $value }}%"
   - alert: HighLatency
     expr: rate(http_request_duration_seconds_sum[5m]) / rate(http_request_duration_seconds_count[5m]) > 0.5
     for: 1m
@@ -16,4 +16,4 @@ groups:
       severity: warning
       service: web
     annotations:
-      description: Response time > 500ms on {{ $labels.instance }} 
+      description: "Response time on {{ $labels.instance }} is {{ $value }}s"
