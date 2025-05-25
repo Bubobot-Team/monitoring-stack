@@ -1,4 +1,16 @@
 ---
+- name: Update Prometheus configuration locally
+  hosts: localhost
+  connection: local
+  gather_facts: false
+  tasks:
+    - name: Update prometheus.yml with current exporters
+      shell: ./update-prometheus-config.sh
+      args:
+        executable: /bin/bash
+      register: update_result
+      changed_when: update_result.stdout != ""
+
 - name: Deploy Monitoring Stack
   hosts: prometheus
   become: true
