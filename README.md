@@ -4,7 +4,7 @@ This repository contains a collection of pre-configured monitoring stacks that c
 
 ## Author
 
-Created and maintained by Bubobot Team.
+Created and maintained by Bubobot Team. Visit us at [https://bubobot.com/](https://bubobot.com/).
 
 ## Directory Structure
 
