@@ -95,6 +95,13 @@ We welcome contributions from the community! To contribute:
 
 Please ensure your contributions follow our best practices and include proper documentation.
 
+## Support
+
+For support and community engagement, please:
+- Open an issue in this repository for bug reports and feature requests
+- Email us at support@bubobot.com for direct technical assistance
+- Join our DevOps community on Discord: https://discord.gg/qwSKMu4jYA - Connect with fellow engineers focused on system reliability, monitoring, and infrastructure automation
+
 ## License
 
 This project is open source and available under the MIT License. You are free to:
@@ -102,11 +109,3 @@ This project is open source and available under the MIT License. You are free to
 - Modify and distribute the code
 - Use it for commercial purposes
 - Contribute back to the project
-
-## Support
-
-For support, please:
-- Open an issue in this repository
-- Email us at support@bubobot.com
-- Join our Discord community: https://discord.gg/qwSKMu4jYA
-- Check our documentation for common issues and solutions
